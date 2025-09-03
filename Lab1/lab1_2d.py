@@ -7,10 +7,10 @@ matplotlib.use("TkAgg")
 
 def create_pentagon(center=(0, 0), radius=1):
     """Create the vertices of a pentagon."""
-    angles = np.linspace(0, 2 * np.pi, 6)[:-1]  # angles for five vertices from 0 to 2pi, circle
-    x = center[0] + radius * np.cos(angles)  # x = r*cos(a)
-    y = center[1] + radius * np.sin(angles)  # y = r*sin(a)
-    ones = np.ones_like(x)  # homogeneous coordinates
+    angles = np.linspace(0, 2 * np.pi, 6)  # angles for five vertices from 0 to 2pi, like circle
+    x = center[0] + radius * np.cos(angles)  # x = r*cos(a) horizontal
+    y = center[1] + radius * np.sin(angles)  # y = r*sin(a) vertical
+    ones = np.ones_like(x)  # homogeneous coordinates, add a row of ones, to make it possible to do matrix multiplication
     return np.vstack([x, y, ones])  # 3 x 5 matrix, (x, y, 1)
 
 
@@ -29,7 +29,7 @@ def translation_matrix(tx, ty):
 
 
 def all_transforming(polygon, S, T):
-    return T @ S @ polygon  # apply scaling then translation
+    return T @ S @ polygon  # apply scaling then translation, otherwise it doesn't work
 
 
 polygon = create_pentagon()
@@ -43,8 +43,8 @@ ax.set_aspect('equal')
 print(polygon)
 current = polygon.copy()
 
-colors = plt.cm.viridis(np.linspace(0, 1, 5))
-colors = colormaps['viridis'](np.linspace(0, 1, 5))
+# colors = plt.cm.viridis(np.linspace(0, 1, 5))
+colors = colormaps['viridis'](np.linspace(0, 1, 5)) # Pick 5 colors from the viridis colormap
 trajectory = []
 
 for colour in colors:
@@ -57,7 +57,7 @@ for colour in colors:
 
     ax.plot(np.append(current[0], current[0][0]),
             np.append(current[1], current[1][0]), color=colour)
-    plt.pause(1)
+    plt.pause(0.5)
     current = all_transforming(current, S1, T1)
 
 trajectory = np.array(trajectory)
