@@ -66,14 +66,21 @@ def rotation_matrix(angle):
 
 
 def apply_transformation(polygon, transformation_matrix):
+    """
+    Apply only one transformation to the polygon.
+    """
     return transformation_matrix @ polygon  # matrix multiplication
 
 
 def all_transforming(polygon, S, R, T):
+    """
+    Apply all transformations: scaling, rotation and translation to the polygon in this order.
+    """
     return T @ R @ S @ polygon  # apply scaling, rotation and after that translation, otherwise it doesn't work and the result will be different
 
 
 polygon = create_pentagon()
+print("The polygon matrix:\n", np.round(polygon, 2))
 
 S1 = scale_matrix(1.25, 1.25)  # scale up by 1.25 in x and y
 T1 = translation_matrix(1.5, 1.5)  # translate by (1.5, 1.5)
@@ -82,7 +89,7 @@ R1 = rotation_matrix(np.radians(15))  # rotate by 15 degrees
 fig, ax = plt.subplots(figsize=(6, 6))
 
 ax.set_aspect('equal')
-print("The polygon matrix:\n", polygon)
+
 current = polygon.copy()
 
 # colors = plt.cm.viridis(np.linspace(0, 1, 5))
@@ -101,8 +108,10 @@ for colour in colors:
             np.append(current[1], current[1][0]), color=colour)
     plt.pause(0.5)
     current = all_transforming(current, R1, S1, T1)  # Apply all transformations
+    print("Polygon after all transformations:\n", np.round(current, 2))
 
 trajectory = np.array(trajectory)
+print("Trajectory of centers:\n", np.round(trajectory, 2))
 ax.plot(trajectory[:, 0], trajectory[:, 1], 'k--', label='Trajectory')
 ax.legend()
 plt.show()
