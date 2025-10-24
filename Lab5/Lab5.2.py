@@ -22,7 +22,9 @@ def extract_color_features(image_path, bins=(8, 8, 8)):
         )
         cv2.normalize(hist, hist)  # Normalize the histogram, the sum of bins equals 1
 
-        return hist.flatten()  # Flatten the histogram into a feature vector, 8 * 8 * 8 = 512 dimensions
+        return (
+            hist.flatten()
+        )  # Flatten the histogram into a feature vector, 8 * 8 * 8 = 512 dimensions
     except Exception as e:
         print(f"Error reading image {image_path}: {e}")
         return None

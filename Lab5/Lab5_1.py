@@ -84,7 +84,7 @@ def find_and_match_keypoints(image1, image2):
 
 
 def evaluate_matches(
-        keypoints1, keypoints2, good_matches, matches_mask, matches, image1, image2
+    keypoints1, keypoints2, good_matches, matches_mask, matches, image1, image2
 ):
     """
     Evaluate the quality of matches using RANSAC and calculate the probability of a match being correct.
@@ -206,7 +206,9 @@ def segment_otsu(image):
     markers = markers + 1  # so that sure background is not 0, but 1
     markers[unknown == 255] = 0  # mark the unknown region with zero
 
-    markers = cv2.watershed(image, markers)  # apply watershed algorithm, seeking borders between segments
+    markers = cv2.watershed(
+        image, markers
+    )  # apply watershed algorithm, seeking borders between segments
     image[markers == -1] = [0, 0, 255]  # mark the borders with blue color
 
     return image
